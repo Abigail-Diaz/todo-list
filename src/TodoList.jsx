@@ -1,3 +1,5 @@
+// import TodoListItem component
+import TodoListItem from "./TodoListItem";
 {/*extract from TodoList.jsx*/}
 
 function TodoList(){
@@ -11,7 +13,8 @@ function TodoList(){
     <>
     <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
+          // Render each todos item as a TodoListItem component for better organization
+          <TodoListItem key = {todo.id} todo = {todo}/>
         ))}
     </ul>
     </>
