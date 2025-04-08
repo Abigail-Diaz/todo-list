@@ -1,24 +1,18 @@
 // import TodoListItem component
-import TodoListItem from "./TodoListItem";
-{/*extract from TodoList.jsx*/}
-
-function TodoList(){
-    const todos = [
-      { id: 1, title: 'review resouces' },
-      { id: 2, title: 'take notes' },
-      { id: 3, title: 'code out app' },
-    ];
-    
-    return(
+import TodoListItem from './TodoListItem';
+// function to return a list of todos
+// This component will be used to display the list of todos
+function TodoList({ todoList }) {
+  return (
     <>
-    <ul>
-        {todos.map((todo) => (
+      <ul>
+        {todoList.map((todo) => (
           // Render each todos item as a TodoListItem component for better organization
-          <TodoListItem key = {todo.id} todo = {todo}/>
+          <TodoListItem todo={todo} />
         ))}
-    </ul>
+      </ul>
     </>
-    )
+  );
 }
 
-export default TodoList
+export default TodoList;
