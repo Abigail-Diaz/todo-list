@@ -8,7 +8,7 @@ function TodoList({ todoList }) {
       <ul>
         {todoList.map((todo) => (
           // Render each todos item as a TodoListItem component for better organization
-          <TodoListItem todo={todo} />
+          <TodoListItem todo={todo} key={todo.id} />
         ))}
       </ul>
     </>

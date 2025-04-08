@@ -18,10 +18,10 @@ function App() {
   return (
     <div>
       <h1>My Todos</h1>
-      <TodoForm onAddTodo={handleAddTodo} />{' '}
       {/*Pass the handleAddTodo function to the TodoForm component*/}
-      <TodoList todoList={todoList} />{' '}
+      <TodoForm onAddTodo={handleAddTodo} />
       {/*Pass the todoList state variable to the TodoList component*/}
+      <TodoList todoList={todoList} />
     </div>
   );
 }
