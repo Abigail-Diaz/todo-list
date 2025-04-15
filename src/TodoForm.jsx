@@ -10,14 +10,9 @@ function TodoForm({ onAddTodo }) {
     const title = event.target.title.value;
     const id = Date.now();
 
-    // Handle empty title case
-    if (title.trim() === '') {
-      alert('Please enter a todo title.');
-      return;
-    }
     // pass the new todo object to the onAddTodo function
     // This allows the new todo to be added to the todo list in the parent component
-    onAddTodo({ title, id });
+    onAddTodo({ title, id, isCompleted: false });
 
     // clear the input field and set focus back to it
     event.target.title.value = '';
