@@ -12,7 +12,17 @@ function App() {
   // Add a new todo to the list
   function handleAddTodo(newTodo) {
     setTodoList([...todoList, newTodo]);
-    console.log(todoList);
+  }
+
+  // helper function to set a todo as completed
+  function completeTodo(id) {
+    const updatedTodos = todoList.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isCompleted: true };
+      }
+      return todo;
+    });
+    setTodoList(updatedTodos);
   }
 
   return (
@@ -21,7 +31,7 @@ function App() {
       {/*Pass the handleAddTodo function to the TodoForm component*/}
       <TodoForm onAddTodo={handleAddTodo} />
       {/*Pass the todoList state variable to the TodoList component*/}
-      <TodoList todoList={todoList} />
+      <TodoList todoList={todoList} onCompleteTodo={completeTodo} />
     </div>
   );
 }
