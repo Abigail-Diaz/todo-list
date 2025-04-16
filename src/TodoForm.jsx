@@ -1,21 +1,23 @@
 import { useRef } from 'react';
+import { useState } from 'react';
 
 // Component to handle the form
 function TodoForm({ onAddTodo }) {
+  // state variable to hold the input value of the todo title
+  const [workingTodo, setWorkingTodo] = useState('');
   const todoTitleInput = useRef('');
 
   // function to add a new todo
   function handleAddTodo(event) {
     event.preventDefault();
-    const title = event.target.title.value;
     const id = Date.now();
 
     // pass the new todo object to the onAddTodo function
     // This allows the new todo to be added to the todo list in the parent component
-    onAddTodo({ title, id, isCompleted: false });
+    onAddTodo({ title: workingTodo, id, isCompleted: false });
 
     // clear the input field and set focus back to it
-    event.target.title.value = '';
+    setWorkingTodo('');
     todoTitleInput.current.focus();
   }
 
@@ -30,6 +32,10 @@ function TodoForm({ onAddTodo }) {
           name="title"
           id="todoTitle"
           type="text"
+          value={workingTodo}
+          onChange={(event) => {
+            setWorkingTodo(event.target.value);
+          }}
         ></input>
         <button type="submit">Add Todo</button>
       </form>
