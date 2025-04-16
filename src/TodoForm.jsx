@@ -37,7 +37,12 @@ function TodoForm({ onAddTodo }) {
             setWorkingTodo(event.target.value);
           }}
         ></input>
-        <button type="submit">Add Todo</button>
+        <button
+          type="submit"
+          disabled={workingTodo.trim() == ''}
+        >
+          Add Todo
+        </button>
       </form>
     </>
   );
