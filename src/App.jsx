@@ -25,13 +25,28 @@ function App() {
     setTodoList(updatedTodos);
   }
 
+  // update the todo title when edited
+  function updateTodo(editedTodo) {
+    const updatedTodos = todoList.map((todo) => {
+      if (todo.id === editedTodo.id) {
+        return { ...editedTodo };
+      }
+      return todo;
+    });
+    setTodoList(updatedTodos);
+  }
+
   return (
     <div>
       <h1>My Todos</h1>
       {/*Pass the handleAddTodo function to the TodoForm component*/}
       <TodoForm onAddTodo={handleAddTodo} />
       {/*Pass the todoList state variable to the TodoList component*/}
-      <TodoList todoList={todoList} onCompleteTodo={completeTodo} />
+      <TodoList
+        todoList={todoList}
+        onCompleteTodo={completeTodo}
+        onUpdateTodo={updateTodo}
+      />
     </div>
   );
 }
