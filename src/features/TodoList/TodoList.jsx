@@ -2,7 +2,7 @@
 import TodoListItem from './TodoListItem';
 // function to return a list of todos
 // This component will be used to display the list of todos
-function TodoList({ todoList, onCompleteTodo }) {
+function TodoList({ todoList, onCompleteTodo, onUpdateTodo }) {
   // filter out completed todos from the list
   const filteredTodoList = todoList.filter((todo) => !todo.isCompleted);
   return (
@@ -18,6 +18,7 @@ function TodoList({ todoList, onCompleteTodo }) {
               todo={todo}
               key={todo.id}
               onCompleteTodo={onCompleteTodo}
+              onUpdateTodo={onUpdateTodo}
             />
           ))}
         </ul>
