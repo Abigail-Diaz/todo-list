@@ -2,7 +2,10 @@
 import TodoListItem from './TodoListItem';
 // function to return a list of todos
 // This component will be used to display the list of todos
-function TodoList({ todoList, onCompleteTodo, onUpdateTodo }) {
+function TodoList({ todoList, onCompleteTodo, onUpdateTodo, isLoading }) {
+  if (isLoading) {
+    return <p>Todo list loading...</p>;
+  }
   // filter out completed todos from the list
   const filteredTodoList = todoList.filter((todo) => !todo.isCompleted);
   return (

@@ -10,6 +10,8 @@ function App() {
   const [todoList, setTodoList] = useState([]);
   // Create a state variable to hold the current error message (if any)
   const [errorMessage, setErrorMessage] = useState('');
+  // hold loading state
+  const [isLoading, setIsLoading] = useState(false);
   // Airtable API constants
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
@@ -17,6 +19,7 @@ function App() {
   // fetch the todos from the Airtable
   useEffect(() => {
     const fetchTodos = async () => {
+      setIsLoading(true);
       const options = {
         method: 'GET',
         headers: {
@@ -48,7 +51,8 @@ function App() {
         // handle errors when fetching from the API
         setErrorMessage(error.message);
       } finally {
-        // loading for future implementation here
+        // loading state set to false to clear loading message
+        setIsLoading(false);
       }
     };
 
@@ -92,6 +96,7 @@ function App() {
         todoList={todoList}
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
+        isLoading={isLoading}
       />
       {errorMessage && (
         <div>
