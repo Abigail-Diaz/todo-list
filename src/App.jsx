@@ -60,9 +60,51 @@ function App() {
   }, []);
 
   // Add a new todo to the list
-  function handleAddTodo(newTodo) {
-    setTodoList([...todoList, newTodo]);
-  }
+  const handleAddTodo = async (newTodo) => {
+    const payload = {
+      records: [
+        {
+          fields: {
+            title: newTodo.title,
+            isCompleted: newTodo.isCompleted,
+          },
+        },
+      ],
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const resp = await fetch(url, options);
+
+      if (!resp.ok) {
+        throw new Error(resp.statusText);
+      }
+
+      const { records } = await resp.json();
+
+      const savedTodo = {
+        id: records[0].id,
+        ...records[0].fields,
+      };
+      // ensure isCompleted has a boolean value in case it is not returned by the Airtable
+      if (!records[0].fields.isCompleted) {
+        savedTodo.isCompleted = false;
+      }
+      setTodoList([...todoList, savedTodo]);
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      // implement saving message on button functionality on next commit
+    }
+  };
 
   // helper function to set a todo as completed
   function completeTodo(id) {
