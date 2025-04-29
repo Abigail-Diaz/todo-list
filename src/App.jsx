@@ -3,11 +3,54 @@ import TodoList from './features/TodoList/TodoList';
 import TodoForm from './features/TodoForm';
 
 // import useState hook to create a new state variable
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   // Create a state variable to hold the current list of todos
   const [todoList, setTodoList] = useState([]);
+  // Airtable API constants
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  const token = `Bearer ${import.meta.env.VITE_PAT}`;
+
+  // fetch the todos from the Airtable
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+        },
+      };
+      // fetch data from the API and handle errors
+      try {
+        const resp = await fetch(url, options);
+        if (!resp.ok) {
+          throw new Error(resp.statusText);
+        }
+        const { records } = await resp.json();
+
+        // map Airtable records to todo objects
+        const todos = records.map((record) => {
+          const todo = {
+            id: record.id,
+            ...record.fields,
+          };
+          // ensure isCompleted has a boolean value in case it is not returned by the Airtable
+          if (!todo.isCompleted) {
+            todo.isCompleted = false;
+          }
+          return todo;
+        });
+        setTodoList(todos);
+      } catch (error) {
+        // error handling implementation here
+      } finally {
+        // loading for future implementation here
+      }
+    };
+
+    fetchTodos();
+  }, []);
 
   // Add a new todo to the list
   function handleAddTodo(newTodo) {
