@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 function App() {
   // Create a state variable to hold the current list of todos
   const [todoList, setTodoList] = useState([]);
+  // Create a state variable to hold the current error message (if any)
+  const [errorMessage, setErrorMessage] = useState('');
   // Airtable API constants
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
@@ -43,7 +45,8 @@ function App() {
         });
         setTodoList(todos);
       } catch (error) {
-        // error handling implementation here
+        // handle errors when fetching from the API
+        setErrorMessage(error.message);
       } finally {
         // loading for future implementation here
       }
@@ -90,6 +93,13 @@ function App() {
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
       />
+      {errorMessage && (
+        <div>
+          <hr />
+          <p>{errorMessage}</p>
+          <button onClick={() => setErrorMessage('')}>Dismiss</button>
+        </div>
+      )}
     </div>
   );
 }
