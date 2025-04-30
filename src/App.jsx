@@ -62,25 +62,9 @@ function App() {
 
   // Add a new todo to the list
   const handleAddTodo = async (newTodo) => {
-    const payload = {
-      records: [
-        {
-          fields: {
-            title: newTodo.title,
-            isCompleted: newTodo.isCompleted,
-          },
-        },
-      ],
-    };
-
-    const options = {
-      method: 'POST',
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    };
+    const fields = { title: newTodo.title, isCompleted: newTodo.isCompleted };
+    // send POST with helper
+    const options = createOptions('POST', [{ fields }]);
 
     try {
       // display the saving message
