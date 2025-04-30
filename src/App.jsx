@@ -113,8 +113,8 @@ function App() {
 
   // helper function to set a todo as completed
   async function completeTodo(id) {
+    setIsSaving(true);
     const originalTodo = todoList.find((todo) => todo.id === id);
-
     const payload = {
       records: [
         {
