@@ -18,37 +18,36 @@ function App() {
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
 
+  // helpers to refactor the code and handle repeated code
+  function createOptions(method, records) {
+    const opts = {
+      method,
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    };
+    if (records) {
+      opts.body = JSON.stringify({ records });
+    }
+    return opts;
+  }
+
+  function recordToTodo(record) {
+    const todo = { id: record.id, ...record.fields };
+    if (!todo.isCompleted) todo.isCompleted = false;
+    return todo;
+  }
+
   // fetch the todos from the Airtable
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: token,
-        },
-      };
-      // fetch data from the API and handle errors
       try {
-        const resp = await fetch(url, options);
-        if (!resp.ok) {
-          throw new Error(resp.statusText);
-        }
+        const resp = await fetch(url, createOptions('GET'));
+        if (!resp.ok) throw new Error(resp.statusText);
         const { records } = await resp.json();
-
-        // map Airtable records to todo objects
-        const todos = records.map((record) => {
-          const todo = {
-            id: record.id,
-            ...record.fields,
-          };
-          // ensure isCompleted has a boolean value in case it is not returned by the Airtable
-          if (!todo.isCompleted) {
-            todo.isCompleted = false;
-          }
-          return todo;
-        });
-        setTodoList(todos);
+        setTodoList(records.map(recordToTodo));
       } catch (error) {
         // handle errors when fetching from the API
         setErrorMessage(error.message);
