@@ -12,6 +12,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   // hold loading state
   const [isLoading, setIsLoading] = useState(false);
+  // hold the saving state
+  const [isSaving, setIsSaving] = useState(false);
   // Airtable API constants
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
@@ -82,6 +84,8 @@ function App() {
     };
 
     try {
+      // display the saving message
+      setIsSaving(true);
       const resp = await fetch(url, options);
 
       if (!resp.ok) {
@@ -102,7 +106,8 @@ function App() {
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
-      // implement saving message on button functionality on next commit
+      // stop saving message on button
+      setIsSaving(false);
     }
   };
 
@@ -132,7 +137,7 @@ function App() {
     <div>
       <h1>My Todos</h1>
       {/*Pass the handleAddTodo function to the TodoForm component*/}
-      <TodoForm onAddTodo={handleAddTodo} />
+      <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving}/>
       {/*Pass the todoList state variable to the TodoList component*/}
       <TodoList
         todoList={todoList}
