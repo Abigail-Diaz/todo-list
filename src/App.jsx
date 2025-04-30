@@ -122,22 +122,86 @@ function App() {
     setTodoList(updatedTodos);
   }
 
-  // update the todo title when edited
-  function updateTodo(editedTodo) {
-    const updatedTodos = todoList.map((todo) => {
-      if (todo.id === editedTodo.id) {
-        return { ...editedTodo };
-      }
-      return todo;
-    });
-    setTodoList(updatedTodos);
-  }
+  // helper function to set a todo as completed
+  async function updateTodo(editedTodo) {
+    const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
 
+    const payload = {
+      records: [
+        {
+          id: editedTodo.id,
+          fields: {
+            title: editedTodo.title,
+            isCompleted: editedTodo.isCompleted,
+          },
+        },
+      ],
+    };
+
+    // Create options object for fetch request
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: token, // Using the same Authorization token as before
+        'Content-Type': 'application/json', // JSON
+      },
+      body: JSON.stringify(payload), //  JSON
+    };
+
+    try {
+      // display the saving message
+      setIsSaving(true);
+      // Optimistically update the UI before the request completes
+      const updatedTodos = todoList.map((todo) =>
+        todo.id === editedTodo.id ? { ...editedTodo } : todo
+      );
+      setTodoList(updatedTodos);
+
+      // Send the PATCH request
+      const resp = await fetch(url, options);
+      if (!resp.ok) {
+        throw new Error('Failed to update todo');
+      }
+
+      const { records } = await resp.json();
+
+      // Create updatedTodo object
+      const updatedTodo = {
+        id: records[0].id,
+        ...records[0].fields,
+      };
+
+      // Ensure isCompleted is explicitly set to false if missing
+      if (!records[0].fields.isCompleted) {
+        updatedTodo.isCompleted = false;
+      }
+
+      // update after successful API call
+      const finalTodos = todoList.map((todo) =>
+        todo.id === updatedTodo.id ? { ...updatedTodo } : todo
+      );
+      setTodoList(finalTodos);
+    } catch (error) {
+      // Revert the UI update if the API request fails
+      console.error(error);
+      setErrorMessage(`${error.message}. Reverting todo...`);
+
+      // Revert to the original todo state in case of an error
+      // This is the original todo before the optimistic update
+      const revertedTodos = todoList.map((todo) =>
+        todo.id === originalTodo.id ? { ...originalTodo } : todo
+      );
+      setTodoList(revertedTodos);
+    } finally {
+      // Reset isSaving to false after the operation completes
+      setIsSaving(false);
+    }
+  }
   return (
     <div>
       <h1>My Todos</h1>
       {/*Pass the handleAddTodo function to the TodoForm component*/}
-      <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving}/>
+      <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving} />
       {/*Pass the todoList state variable to the TodoList component*/}
       <TodoList
         todoList={todoList}

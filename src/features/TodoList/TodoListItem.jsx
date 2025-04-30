@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import TextInputWithLabel from '../../shared/TextInputWithLabel';
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
@@ -6,6 +6,11 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   // state variable to hold the input value of the todo title
   const [workingTitle, setWorkingTitle] = useState(todo.title);
+
+  // sync the working title with the todo title when the todo prop changes
+  useEffect(() => {
+    setWorkingTitle(todo.title);
+  }, [todo]);
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -21,7 +26,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
       return;
     }
     event.preventDefault();
-    onUpdateTodo({ ...todo, title: workingTitle });
+    onUpdateTodo({ ...todo, title: workingTitle }); // Optimistically call parent to update the todo
     setIsEditing(false);
   };
   return (
