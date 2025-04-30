@@ -98,25 +98,9 @@ function App() {
   async function completeTodo(id) {
     setIsSaving(true);
     const originalTodo = todoList.find((todo) => todo.id === id);
-    const payload = {
-      records: [
-        {
-          id: id,
-          fields: {
-            isCompleted: true,
-          },
-        },
-      ],
-    };
-
-    const options = {
-      method: 'PATCH',
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    };
+    // send PATCH request to mark as completed
+    const records = [{ id, fields: { isCompleted: true } }];
+    const options = makeOptions('PATCH', records);
 
     try {
       const updatedTodos = todoList.map((todo) =>
