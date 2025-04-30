@@ -100,7 +100,7 @@ function App() {
     const originalTodo = todoList.find((todo) => todo.id === id);
     // send PATCH request to mark as completed
     const records = [{ id, fields: { isCompleted: true } }];
-    const options = makeOptions('PATCH', records);
+    const options = createOptions('PATCH', records);
 
     try {
       const updatedTodos = todoList.map((todo) =>
@@ -146,27 +146,17 @@ function App() {
   async function updateTodo(editedTodo) {
     const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
 
-    const payload = {
-      records: [
-        {
-          id: editedTodo.id,
-          fields: {
-            title: editedTodo.title,
-            isCompleted: editedTodo.isCompleted,
-          },
+    // send PATCH request with updated fields
+    const records = [
+      {
+        id: editedTodo.id,
+        fields: {
+          title: editedTodo.title,
+          isCompleted: editedTodo.isCompleted,
         },
-      ],
-    };
-
-    // Create options object for fetch request
-    const options = {
-      method: 'PATCH',
-      headers: {
-        Authorization: token, // Using the same Authorization token as before
-        'Content-Type': 'application/json', // JSON
       },
-      body: JSON.stringify(payload), //  JSON
-    };
+    ];
+    const options = createOptions('PATCH', records);
 
     try {
       // display the saving message
