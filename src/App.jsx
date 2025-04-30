@@ -112,14 +112,67 @@ function App() {
   };
 
   // helper function to set a todo as completed
-  function completeTodo(id) {
-    const updatedTodos = todoList.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, isCompleted: true };
+  async function completeTodo(id) {
+    const originalTodo = todoList.find((todo) => todo.id === id);
+
+    const payload = {
+      records: [
+        {
+          id: id,
+          fields: {
+            isCompleted: true,
+          },
+        },
+      ],
+    };
+
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const updatedTodos = todoList.map((todo) =>
+        todo.id === id ? { ...todo, isCompleted: true } : todo
+      );
+      setTodoList(updatedTodos);
+
+      // 5. Send the PATCH request
+      const resp = await fetch(url, options);
+      if (!resp.ok) {
+        throw new Error('Failed to complete todo');
       }
-      return todo;
-    });
-    setTodoList(updatedTodos);
+
+      const { records } = await resp.json();
+
+      const completedTodo = {
+        id: records[0].id,
+        ...records[0].fields,
+      };
+
+      if (records[0].fields.isCompleted === undefined) {
+        completedTodo.isCompleted = true;
+      }
+
+      const finalTodos = todoList.map((todo) =>
+        todo.id === completedTodo.id ? { ...completedTodo } : todo
+      );
+      setTodoList(finalTodos);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(`${error.message}. Reverting todo...`);
+
+      const revertedTodos = todoList.map((todo) =>
+        todo.id === originalTodo.id ? { ...originalTodo } : todo
+      );
+      setTodoList(revertedTodos);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   // helper function to set a todo as completed
