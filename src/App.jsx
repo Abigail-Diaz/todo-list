@@ -9,9 +9,13 @@ import { useState, useEffect } from 'react';
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
 const token = `Bearer ${import.meta.env.VITE_PAT}`;
 
-const encodeUrl = ({ sortField, sortDirection }) => {
+const encodeUrl = ({ sortField, sortDirection, queryString }) => {
   let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
-  return encodeURI(`${url}?${sortQuery}`);
+  let searchQuery = '';
+  if (queryString) {
+    searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
+  }
+  return encodeURI(`${url}?${sortQuery}${searchQuery}`);
 };
 
 function App() {
@@ -25,6 +29,7 @@ function App() {
   const [isSaving, setIsSaving] = useState(false);
   const [sortField, setSortField] = useState('createdTime');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [queryString, setQueryString] = useState('');
 
   // helpers to refactor the code and handle repeated code
   function createOptions(method, records) {
@@ -53,7 +58,7 @@ function App() {
       setIsLoading(true);
       try {
         const resp = await fetch(
-          encodeUrl({ sortField, sortDirection }),
+          encodeUrl({ sortField, sortDirection, queryString }),
           createOptions('GET')
         );
         if (!resp.ok) throw new Error(resp.statusText);
@@ -69,7 +74,7 @@ function App() {
     };
 
     fetchTodos();
-  }, [sortDirection, sortField]);
+  }, [sortDirection, sortField, queryString]);
 
   // Add a new todo to the list
   const handleAddTodo = async (newTodo) => {
@@ -81,7 +86,7 @@ function App() {
       // display the saving message
       setIsSaving(true);
       const resp = await fetch(
-        encodeUrl({ sortField, sortDirection }),
+        encodeUrl({ sortField, sortDirection, queryString }),
         options
       );
 
@@ -124,7 +129,7 @@ function App() {
 
       // Send the PATCH request
       const resp = await fetch(
-        encodeUrl({ sortField, sortDirection }),
+        encodeUrl({ sortField, sortDirection, queryString }),
         options
       );
       if (!resp.ok) {
@@ -186,7 +191,7 @@ function App() {
 
       // Send the PATCH request
       const resp = await fetch(
-        encodeUrl({ sortField, sortDirection }),
+        encodeUrl({ sortField, sortDirection, queryString }),
         options
       );
       if (!resp.ok) {
@@ -245,6 +250,8 @@ function App() {
         setSortField={setSortField}
         sortDirection={sortDirection}
         setSortDirection={setSortDirection}
+        queryString={queryString}
+        setQueryString={setQueryString}
       />
       {errorMessage && (
         <div>

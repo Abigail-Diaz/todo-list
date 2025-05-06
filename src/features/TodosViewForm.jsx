@@ -9,10 +9,24 @@ function TodosViewForm({
   setSortDirection,
   sortField,
   setSortField,
+  queryString,
+  setQueryString,
 }) {
   return (
     <>
       <form onSubmit={preventRefresh}>
+        <div>
+          <label for="queryString">Search todos</label>
+          <input
+            type="text"
+            id="queryString"
+            value={queryString}
+            onChange={(e) => setQueryString(e.target.value)}
+          />
+          <button type="button" onClick={(e) => setQueryString('')}>
+            Clear
+          </button>
+        </div>
         <div>
           <label for="sortBy">Sort By</label>
           <select
