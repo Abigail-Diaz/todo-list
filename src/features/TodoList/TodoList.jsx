@@ -1,5 +1,6 @@
 // import TodoListItem component
 import TodoListItem from './TodoListItem';
+import styles from './TodoList.module.css';
 // function to return a list of todos
 // This component will be used to display the list of todos
 function TodoList({ todoList, onCompleteTodo, onUpdateTodo, isLoading }) {
@@ -14,7 +15,7 @@ function TodoList({ todoList, onCompleteTodo, onUpdateTodo, isLoading }) {
       {filteredTodoList.length === 0 ? (
         <p>Add todo above to get started</p>
       ) : (
-        <ul>
+        <ul className={styles.list}>
           {/* Render each todos item as a TodoListItem component for better organization*/}
           {filteredTodoList.map((todo) => (
             <TodoListItem

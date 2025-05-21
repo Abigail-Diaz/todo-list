@@ -2,6 +2,7 @@ import './App.css';
 import TodoList from './features/TodoList/TodoList';
 import TodoForm from './features/TodoForm';
 import TodosViewForm from './features/TodosViewForm';
+import styles from './App.module.css';
 // import useState hook to create a new state variable
 import { useState, useEffect, useCallback } from 'react';
 
@@ -236,7 +237,7 @@ function App() {
     }
   }
   return (
-    <div>
+    <div className={styles.formContainer}>
       <h1>My Todos</h1>
       {/*Pass the handleAddTodo function to the TodoForm component*/}
       <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving} />
@@ -257,7 +258,7 @@ function App() {
         setQueryString={setQueryString}
       />
       {errorMessage && (
-        <div>
+        <div className={styles.errorMessage}>
           <hr />
           <p>{errorMessage}</p>
           <button onClick={() => setErrorMessage('')}>Dismiss</button>
