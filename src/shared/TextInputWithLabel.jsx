@@ -1,8 +1,16 @@
 // Display for a text input with a label
+
+import styled from 'styled-components';
+
+ const StyledLabel = styled.label`
+    padding-right: 0.5rem;
+    font-weight: bold;
+  `;
+
 function TextInputWithLabel({ elementId, label, onChange, ref, value }) {
   return (
     <>
-      <label htmlFor={elementId}>{label}</label>
+      <StyledLabel htmlFor={elementId}>{label}</StyledLabel>
       <input
         type="text"
         id={elementId}

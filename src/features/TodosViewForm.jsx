@@ -1,4 +1,14 @@
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+// Styled components
+const StyledSelect = styled.select`
+  padding: 5px;
+  border-radius: 5px;
+`;
+
+const StyledLabel = styled.label`
+  padding-right: 0.5rem;
+`;
 
 // Prevent default form submission to avoid page refresh
 function preventRefresh(event) {
@@ -27,7 +37,7 @@ function TodosViewForm({
     <>
       <form onSubmit={preventRefresh}>
         <div>
-          <label htmlFor="queryString">Search todos</label>
+          <StyledLabel htmlFor="queryString">Search todos</StyledLabel>
           <input
             type="text"
             id="queryString"
@@ -39,8 +49,8 @@ function TodosViewForm({
           </button>
         </div>
         <div>
-          <label htmlFor="sortBy">Sort By</label>
-          <select
+          <StyledLabel htmlFor="sortBy">Sort By</StyledLabel>
+          <StyledSelect
             id="sortBy"
             name="sortBy"
             value={sortField}
@@ -48,7 +58,7 @@ function TodosViewForm({
           >
             <option value="title">Title</option>
             <option value="createdTime">Time added</option>
-          </select>
+          </StyledSelect>
         </div>
       </form>
     </>
