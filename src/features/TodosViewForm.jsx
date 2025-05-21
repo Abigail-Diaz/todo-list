@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
+
 // Prevent default form submission to avoid page refresh
 function preventRefresh(event) {
   event.preventDefault();
 }
 
-// This component is used to sort the todos by title or created time
 function TodosViewForm({
   sortDirection,
   setSortDirection,
@@ -12,27 +13,36 @@ function TodosViewForm({
   queryString,
   setQueryString,
 }) {
+  const [localQueryString, setLocalQueryString] = useState(queryString);
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      setQueryString(localQueryString);
+    }, 500);
+
+    return () => clearTimeout(debounce);
+  }, [localQueryString, setQueryString]);
+
   return (
     <>
       <form onSubmit={preventRefresh}>
         <div>
-          <label for="queryString">Search todos</label>
+          <label htmlFor="queryString">Search todos</label>
           <input
             type="text"
             id="queryString"
-            value={queryString}
-            onChange={(e) => setQueryString(e.target.value)}
+            value={localQueryString}
+            onChange={(e) => setLocalQueryString(e.target.value)}
           />
-          <button type="button" onClick={(e) => setQueryString('')}>
+          <button type="button" onClick={() => setLocalQueryString('')}>
             Clear
           </button>
         </div>
         <div>
-          <label for="sortBy">Sort By</label>
+          <label htmlFor="sortBy">Sort By</label>
           <select
             id="sortBy"
             name="sortBy"
-            defaultValue="title"
             value={sortField}
             onChange={(event) => setSortField(event.target.value)}
           >
