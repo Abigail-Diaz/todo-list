@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import TextInputWithLabel from '../../shared/TextInputWithLabel';
+import styles from './TodoListItem.module.css';
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
   // state variable to edit the todo title
@@ -30,7 +31,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
     setIsEditing(false);
   };
   return (
-    <li>
+    <li className={styles.listItem}>
       <form onSubmit={handleUpdate}>
         {/* Display the editing mode if the todo is being edited */}
         {isEditing ? (

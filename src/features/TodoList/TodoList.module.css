@@ -1,0 +1,4 @@
+.list {
+  list-style: none;    /* Remove the bullets */
+  padding: 0;     /* Remove padding */
+}
