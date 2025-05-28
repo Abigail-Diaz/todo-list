@@ -15,6 +15,10 @@ const actions = {
   revertTodo: 'revertTodo',
   //action on Dismiss Error button
   clearError: 'clearError',
+
+  setSortField: 'setSortField',
+  setSortDirection: 'setSortDirection',
+  setQueryString: 'setQueryString',
 };
 
 function reducer(state = initialState, action) {
@@ -92,6 +96,24 @@ function reducer(state = initialState, action) {
         ...state,
         errorMessage: '',
       };
+    case actions.setSortField:
+      return {
+        ...state,
+        sortField: action.sortField,
+      };
+
+    case actions.setSortDirection:
+      return {
+        ...state,
+        sortDirection: action.sortDirection,
+      };
+
+    case actions.setQueryString:
+      return {
+        ...state,
+        queryString: action.queryString,
+      };
+
     default:
       return state;
   }
@@ -102,6 +124,9 @@ const initialState = {
   isLoading: false,
   isSaving: false,
   errorMessage: '',
+  sortDirection: 'desc',
+  sortField: 'createdTime',
+  queryString: '',
 };
 
 function recordToTodo(record) {
@@ -110,4 +135,4 @@ function recordToTodo(record) {
   return todo;
 }
 
-export {reducer, actions, initialState};
+export { reducer, actions, initialState };

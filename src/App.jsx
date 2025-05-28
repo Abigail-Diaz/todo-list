@@ -17,11 +17,8 @@ const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${impor
 const token = `Bearer ${import.meta.env.VITE_PAT}`;
 
 function App() {
-  const [sortField, setSortField] = useState('createdTime');
-  const [sortDirection, setSortDirection] = useState('asc');
-  const [queryString, setQueryString] = useState('');
   const [todoState, dispatch] = useReducer(todosReducer, initialTodosState);
-  const { isLoading, todoList, isSaving, errorMessage } = todoState;
+  const { isLoading, todoList, isSaving, errorMessage, sortField, sortDirection, queryString } = todoState;
   const encodeUrl = useCallback(
     () => {
       let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
@@ -240,11 +237,11 @@ function App() {
       <hr />
       <TodosViewForm
         sortField={sortField}
-        setSortField={setSortField}
+        setSortField={(field) => dispatch({ type: todoActions.setSortField, sortField: field })}
         sortDirection={sortDirection}
-        setSortDirection={setSortDirection}
+        setSortDirection={(dir) => dispatch({ type: todoActions.setSortDirection, sortDirection: dir })}
         queryString={queryString}
-        setQueryString={setQueryString}
+        setQueryString={(q) => dispatch({ type: todoActions.setQueryString, queryString: q })}
       />
       {errorMessage && (
         <div className={styles.errorMessage}>
