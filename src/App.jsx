@@ -3,6 +3,12 @@ import TodoList from './features/TodoList/TodoList';
 import TodoForm from './features/TodoForm';
 import TodosViewForm from './features/TodosViewForm';
 import styles from './App.module.css';
+import {
+  reducer as todosReducer,
+  actions as todoActions,
+  initialState as initialTodosState,
+} from './reducers/todos.reducer';
+
 // import useState hook to create a new state variable
 import { useState, useEffect, useCallback } from 'react';
 
@@ -22,6 +28,7 @@ function App() {
   const [sortField, setSortField] = useState('createdTime');
   const [sortDirection, setSortDirection] = useState('asc');
   const [queryString, setQueryString] = useState('');
+  const [todoState, dispatch] = useReducer(todosReducer, initialTodosState);
   const encodeUrl = useCallback(
     () => {
       let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
@@ -33,7 +40,6 @@ function App() {
     },
     [queryString, sortDirection, sortField]
   );
-  
 
   // helpers to refactor the code and handle repeated code
   function createOptions(method, records) {
