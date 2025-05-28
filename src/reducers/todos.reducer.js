@@ -110,9 +110,4 @@ function recordToTodo(record) {
   return todo;
 }
 
-// ensure isCompleted has a boolean value in case it is not returned by the Airtable
-if (!records[0].fields.isCompleted) {
-  savedTodo.isCompleted = false;
-}
-
-export default reducer;
+export {reducer, actions, initialState};
