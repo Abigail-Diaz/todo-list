@@ -1,7 +1,5 @@
 import './App.css';
-import TodoList from './features/TodoList/TodoList';
-import TodoForm from './features/TodoForm';
-import TodosViewForm from './features/TodosViewForm';
+
 import styles from './App.module.css';
 import {
   reducer as todosReducer,
@@ -9,9 +7,13 @@ import {
   initialState as initialTodosState,
 } from './reducers/todos.reducer';
 
+// Import pages
+import TodosPage from './pages/TodosPage';
+
 // import useState hook to create a new state variable
 import { useState, useEffect, useCallback, useReducer } from 'react';
 
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 // Airtable API constants
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
 const token = `Bearer ${import.meta.env.VITE_PAT}`;
@@ -223,34 +225,32 @@ function App() {
     }
   }
   return (
-    <div className={styles.formContainer}>
-      <h1>My Todos</h1>
-      {/*Pass the handleAddTodo function to the TodoForm component*/}
-      <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving} />
-      {/*Pass the todoList state variable to the TodoList component*/}
-      <TodoList
-        todoList={todoList}
-        onCompleteTodo={completeTodo}
-        onUpdateTodo={updateTodo}
-        isLoading={isLoading}
-      />
-      <hr />
-      <TodosViewForm
-        sortField={sortField}
-        setSortField={(field) => dispatch({ type: todoActions.setSortField, sortField: field })}
-        sortDirection={sortDirection}
-        setSortDirection={(dir) => dispatch({ type: todoActions.setSortDirection, sortDirection: dir })}
-        queryString={queryString}
-        setQueryString={(q) => dispatch({ type: todoActions.setQueryString, queryString: q })}
-      />
-      {errorMessage && (
-        <div className={styles.errorMessage}>
-          <hr />
-          <p>{errorMessage}</p>
-          <button onClick={() => dispatch({ type: todoActions.clearError })}>Dismiss</button>
-        </div>
-      )}
-    </div>
+    <>
+      <div className={styles.formContainer}>
+        <nav>
+          <NavLink to="/">Home</NavLink>
+        </nav>
+        <Routes>
+          <Route path="/" element={
+            <TodosPage
+              todoList={todoList}
+              isLoading={isLoading}
+              updateTodo={updateTodo}
+              completeTodo={completeTodo}
+              handleAddTodo={handleAddTodo}
+              isSaving={isSaving}
+              sortField={sortField}
+              errorMessage={errorMessage}
+              queryString={queryString}
+              dispatch={dispatch}
+              sortDirection={sortDirection}
+            />
+          }>
+          </Route>
+          <Route path="/about" element={<h1>About Page</h1>}></Route>
+        </Routes >
+      </div>
+    </>
   );
 }
 export default App;
