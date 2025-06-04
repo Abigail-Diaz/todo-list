@@ -55,7 +55,7 @@ function reducer(state = initialState, action) {
 
       return {
         ...state,
-        todoList: [...state.todoList, savedTodo],
+        todoList: [savedTodo, ...state.todoList],
         isSaving: false,
       };
     case actions.endRequest:
