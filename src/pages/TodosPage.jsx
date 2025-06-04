@@ -2,6 +2,7 @@ import TodoList from '../features/TodoList/TodoList';
 import TodoForm from '../features/TodoForm';
 import TodosViewForm from '../features/TodosViewForm';
 
+
 import {
     actions as todoActions,
 } from '../reducers/todos.reducer';
@@ -21,7 +22,6 @@ function TodosPage({
     sortDirection}) {
     return (
         <>
-            <h1>My Todos</h1>
             {/*Pass the handleAddTodo function to the TodoForm component*/}
             <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving} />
             {/*Pass the todoList state variable to the TodoList component*/}

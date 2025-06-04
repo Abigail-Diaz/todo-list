@@ -1,5 +1,6 @@
 import './App.css';
-
+// Import Header component
+import Header from './pages/Header';// Import Header component
 import styles from './App.module.css';
 import {
   reducer as todosReducer,
@@ -13,7 +14,7 @@ import TodosPage from './pages/TodosPage';
 // import useState hook to create a new state variable
 import { useState, useEffect, useCallback, useReducer } from 'react';
 
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 // Airtable API constants
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
 const token = `Bearer ${import.meta.env.VITE_PAT}`;
@@ -21,6 +22,8 @@ const token = `Bearer ${import.meta.env.VITE_PAT}`;
 function App() {
   const [todoState, dispatch] = useReducer(todosReducer, initialTodosState);
   const { isLoading, todoList, isSaving, errorMessage, sortField, sortDirection, queryString } = todoState;
+  const location = useLocation()
+  const [title, setTitle] = useState('');
   const encodeUrl = useCallback(
     () => {
       let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
@@ -74,6 +77,19 @@ function App() {
 
     fetchTodos();
   }, [sortDirection, sortField, queryString]);
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/':
+        setTitle('Todo List');
+        break;
+      case '/about':
+        setTitle('About');
+        break;
+      default:
+        setTitle('Not Found');
+    }
+  }, [location]);
 
   // Add a new todo to the list
   const handleAddTodo = async (newTodo) => {
@@ -226,10 +242,8 @@ function App() {
   }
   return (
     <>
+      <Header title={title} />
       <div className={styles.formContainer}>
-        <nav>
-          <NavLink to="/">Home</NavLink>
-        </nav>
         <Routes>
           <Route path="/" element={
             <TodosPage
@@ -248,6 +262,7 @@ function App() {
           }>
           </Route>
           <Route path="/about" element={<h1>About Page</h1>}></Route>
+          <Route path="/\*" element={<h1>Not Found</h1>}></Route>
         </Routes >
       </div>
     </>
