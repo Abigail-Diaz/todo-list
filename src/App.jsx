@@ -1,6 +1,10 @@
 import './App.css';
-// Import Header component
-import Header from './pages/Header';// Import Header component
+// Import components for routing
+import Header from './pages/Header';
+import About from './pages/About';
+import NotFound from './pages/NotFound';
+
+// Import styles
 import styles from './App.module.css';
 import {
   reducer as todosReducer,
@@ -261,8 +265,8 @@ function App() {
             />
           }>
           </Route>
-          <Route path="/about" element={<h1>About Page</h1>}></Route>
-          <Route path="/\*" element={<h1>Not Found</h1>}></Route>
+          <Route path="/about" element={<About/>}></Route>
+          <Route path="*" element={<NotFound/>}></Route>
         </Routes >
       </div>
     </>
