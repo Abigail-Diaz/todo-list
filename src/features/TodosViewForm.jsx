@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 // Styled components
 const StyledSelect = styled.select`
   padding: 5px;
   border-radius: 5px;
+  margin-right: 0.5rem;
 `;
 
 const StyledLabel = styled.label`
@@ -48,6 +50,7 @@ function TodosViewForm({
             Clear
           </button>
         </div>
+
         <div>
           <StyledLabel htmlFor="sortBy">Sort By</StyledLabel>
           <StyledSelect
@@ -58,6 +61,17 @@ function TodosViewForm({
           >
             <option value="title">Title</option>
             <option value="createdTime">Time added</option>
+          </StyledSelect>
+
+          <StyledLabel htmlFor="sortDirection">Direction</StyledLabel>
+          <StyledSelect
+            id="sortDirection"
+            name="sortDirection"
+            value={sortDirection}
+            onChange={(event) => setSortDirection(event.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
           </StyledSelect>
         </div>
       </form>
