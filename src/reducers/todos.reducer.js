@@ -22,7 +22,6 @@ const actions = {
 };
 
 function reducer(state = initialState, action) {
-  console.log('Reducer action:', action.type);
   switch (action.type) {
     case actions.fetchTodos:
       return {
