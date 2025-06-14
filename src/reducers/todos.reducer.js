@@ -22,6 +22,7 @@ const actions = {
 };
 
 function reducer(state = initialState, action) {
+  console.log('Reducer action:', action.type);
   switch (action.type) {
     case actions.fetchTodos:
       return {
@@ -109,6 +110,7 @@ function reducer(state = initialState, action) {
       };
 
     case actions.setQueryString:
+      if (state.queryString === action.queryString) return state;
       return {
         ...state,
         queryString: action.queryString,
