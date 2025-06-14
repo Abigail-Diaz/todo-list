@@ -139,7 +139,7 @@ function App() {
   };
 
   // helper function to set a todo as completed
-  async function completeTodo(id) {
+  const completeTodo = useCallback(async (id) => {
     dispatch({ type: todoActions.startRequest });
     const originalTodo = todoList.find((todo) => todo.id === id);
     // send PATCH request to mark as completed
@@ -183,10 +183,10 @@ function App() {
     } finally {
       dispatch({ type: todoActions.endRequest });
     }
-  }
+  }, [todoList, dispatch]);
 
   // helper function to set a todo as completed
-  async function updateTodo(editedTodo) {
+  const updateTodo = useCallback(async (editedTodo) => {
     const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
 
     // send PATCH request with updated fields
@@ -243,7 +243,7 @@ function App() {
       // Reset isSaving to false after the operation completes
       dispatch({ type: todoActions.endRequest });
     }
-  }
+  }, [todoList, dispatch]);
   return (
     <>
       <Header title={title} />

@@ -1,5 +1,5 @@
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import TodoList from '../features/TodoList/TodoList';
 import TodoForm from '../features/TodoForm';
@@ -23,12 +23,12 @@ function TodosPage({
 }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const filteredTodoList = todoList.filter((todo) => !todo.isCompleted);
+    const filteredTodoList = useMemo(() => todoList.filter((todo) => !todo.isCompleted), [todoList]);
 
     const itemsPerPage = 15;
-    const currentPage = parseInt(searchParams.get('page') || '1', 10);
+    const currentPage = useMemo(() => parseInt(searchParams.get('page') || '1', 10), [searchParams]);
     const indexOfFirstTodo = (currentPage - 1) * itemsPerPage;
-    const totalPages = Math.ceil(filteredTodoList.length / itemsPerPage);
+    const totalPages = useMemo(() => filteredTodoList.length == 0 ? 1 : Math.ceil(filteredTodoList.length / itemsPerPage), [filteredTodoList.length]);
 
     const currentTodos = filteredTodoList.slice(indexOfFirstTodo, indexOfFirstTodo + itemsPerPage);
 
