@@ -7,17 +7,15 @@ function TodoList({ todoList, onCompleteTodo, onUpdateTodo, isLoading }) {
   if (isLoading) {
     return <p>Todo list loading...</p>;
   }
-  // filter out completed todos from the list
-  const filteredTodoList = todoList.filter((todo) => !todo.isCompleted);
   return (
     <>
       {/* Render a add to do message if the todo list is empty */}
-      {filteredTodoList.length === 0 ? (
+      {todoList.length === 0 ? (
         <p>Add todo above to get started</p>
       ) : (
         <ul className={styles.list}>
           {/* Render each todos item as a TodoListItem component for better organization*/}
-          {filteredTodoList.map((todo) => (
+          {todoList.map((todo) => (
             <TodoListItem
               todo={todo}
               key={todo.id}
