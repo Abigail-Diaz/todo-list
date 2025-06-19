@@ -55,7 +55,7 @@ function reducer(state = initialState, action) {
 
       return {
         ...state,
-        todoList: [...state.todoList, savedTodo],
+        todoList: [savedTodo, ...state.todoList],
         isSaving: false,
       };
     case actions.endRequest:
@@ -109,6 +109,7 @@ function reducer(state = initialState, action) {
       };
 
     case actions.setQueryString:
+      if (state.queryString === action.queryString) return state;
       return {
         ...state,
         queryString: action.queryString,
